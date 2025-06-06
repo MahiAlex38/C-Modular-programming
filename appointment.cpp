@@ -8,6 +8,11 @@
 
 using namespace std;
 
+// Declare internal appointment functions before using them
+void bookAppointment();
+void viewAppointments();
+void cancelAppointment();
+
 void runAppointmentModule() {
     int choice;
 

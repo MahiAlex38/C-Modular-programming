@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-// Declare the run functions for each module
+// Declarations for module functions (defined in their respective .cpp files)
 void runAppointmentModule();
 void runBillingModule();
 void runDoctorModule();
@@ -13,14 +13,14 @@ int main() {
     do {
         cout << "\n===== Hospital Management System =====\n";
         cout << "1. Appointment Module\n";
-        cout << "2. Billing Module\n";
+        cout << "2. Billing & Payment Module\n";
         cout << "3. Doctor Management Module\n";
         cout << "4. Patient Management Module\n";
         cout << "5. Pharmacy Inventory Module\n";
         cout << "6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
-        cin.ignore();  // Clear input buffer
+        cin.ignore(); // Clear newline from input buffer
 
         switch (choice) {
             case 1:
@@ -42,7 +42,7 @@ int main() {
                 cout << "Exiting system. Goodbye!" << endl;
                 break;
             default:
-                cout << "Invalid choice. Try again." << endl;
+                cout << "Invalid choice. Try again.\n";
         }
 
     } while (choice != 6);
