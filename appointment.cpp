@@ -21,7 +21,8 @@ void runAppointmentModule() {
         cout << "1. Book Appointment\n";
         cout << "2. View All Appointments\n";
         cout << "3. Cancel Appointment\n";
-        cout << "4. Exit to Main Menu\n";
+         cout << "4. Search Patient\n";
+         cout << "5. Exit to Main Menu\n";
         cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
@@ -30,7 +31,8 @@ void runAppointmentModule() {
             case 1: bookAppointment(); break;
             case 2: viewAppointments(); break;
             case 3: cancelAppointment(); break;
-            case 4: return;
+            case 4: searchPatient(); break;
+            case 5: return;
             default: cout << "Invalid choice. Try again.\n";
         }
     }
@@ -101,4 +103,71 @@ void cancelAppointment() {
     }
 
     cout << "Appointment not found.\n";
+}
+
+//SEARCHING PATIENT
+void searchPatient() {
+    int choice;
+    string searchTerm;
+    bool found = false;
+
+    cout << "\nSearch Patient by:\n";
+    cout << "1. Patient ID\n";
+    cout << "2. Patient Name\n";
+    cout << "3. Patient Contact\n";
+    cout << "Enter your choice: ";
+    cin >> choice;
+    cin.ignore();
+
+    switch (choice) {
+        case 1:
+            {
+                int id;
+                cout << "Enter Patient ID: ";
+                cin >> id;
+                cin.ignore();
+                for (const auto& patient : patients) {
+                    if (patient.id == id) {
+                        cout << "\nPatient Found:\n";
+                        cout << "ID: " << patient.id << "\n";
+                        cout << "Name: " << patient.name << "\n";
+                        cout << "Contact: " << patient.contact << "\n";
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) cout << "Patient not found.\n";
+            }
+            break;
+        case 2:
+            cout << "Enter Patient Name: ";
+            getline(cin, searchTerm);
+            for (const auto& patient : patients) {
+                if (patient.name == searchTerm) {
+                    cout << "\nPatient Found:\n";
+                    cout << "ID: " << patient.id << "\n";
+                    cout << "Name: " << patient.name << "\n";
+                    cout << "Contact: " << patient.contact << "\n";
+                    found = true;
+                }
+            }
+            if (!found) cout << "Patient not found.\n";
+            break;
+        case 3:
+            cout << "Enter Patient Contact: ";
+            getline(cin, searchTerm);
+            for (const auto& patient : patients) {
+                if (patient.contact == searchTerm) {
+                    cout << "\nPatient Found:\n";
+                    cout << "ID: " << patient.id << "\n";
+                    cout << "Name: " << patient.name << "\n";
+                    cout << "Contact: " << patient.contact << "\n";
+                    found = true;
+                }
+            }
+            if (!found) cout << "Patient not found.\n";
+            break;
+        default:
+            cout << "Invalid choice.\n";
+    }
 }
