@@ -41,6 +41,17 @@ void runAppointmentModule() {
     }
 }
 
+bool hasConflict(const Appointment& newAppt) {
+    for (const auto& appt : appointments) {
+        if (appt.doctor.id == newAppt.doctor.id && 
+            appt.date == newAppt.date && 
+            appt.time == newAppt.time) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void bookAppointment() {
     Appointment newAppt;
 
@@ -59,10 +70,32 @@ void bookAppointment() {
     getline(cin, newAppt.patient.contact);
 
     // Doctor info
-    cout << "Enter Doctor Name: ";
-    getline(cin, newAppt.doctor.name);
-    cout << "Enter Doctor Specialization: ";
-    getline(cin, newAppt.doctor.specialization);
+    cout << "Enter Doctor ID: ";
+    while (!(cin >> newAppt.doctor.id)) {
+        cout << "Invalid input. Try again: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore();
+
+    bool doctorFound = false;
+    for (const auto& doc : doctors) {
+        if (doc.id == newAppt.doctor.id) {
+            newAppt.doctor = doc;
+            doctorFound = true;
+            break;
+        }
+    }
+
+    if (!doctorFound) {
+        cout << "Doctor not found.\n";
+        return;
+    }
+
+    if (newAppt.doctor.status != ACTIVE_DOCTOR) {
+        cout << "Selected doctor is not available for appointments.\n";
+        return;
+    }
 
     cout << "Enter Appointment Date (YYYY-MM-DD): ";
     getline(cin, newAppt.date);
@@ -70,6 +103,11 @@ void bookAppointment() {
     getline(cin, newAppt.time);
     cout << "Enter Reason for Appointment: ";
     getline(cin, newAppt.reason);
+
+    if (hasConflict(newAppt)) {
+        cout << "Appointment slot is already booked for this doctor.\n";
+        return;
+    }
 
     appointments.push_back(newAppt);
     cout << "Appointment booked successfully.\n";
