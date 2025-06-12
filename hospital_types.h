@@ -2,6 +2,8 @@
 #define HOSPITAL_TYPES_H
 
 #include <string>
+#include <iostream>
+#include <vector>
 
 enum AppointmentStatus { PENDING, ACTIVE, RETIRED };
 enum DoctorStatus { ACTIVE_DOCTOR, ON_LEAVE, RETIRED_DOCTOR };
@@ -9,19 +11,6 @@ enum StockStatus { IN_STOCK, OUT_OF_STOCK };
 enum Gender { MALE, FEMALE };
 enum AdmissionStatus { ADMITTED, DISCHARGED };
 enum WardType { GENERAL, PRIVATE, ICU, EMERGENCY };
-
-struct Bed {
-    int bedNumber;
-    bool isOccupied;
-    Patient* occupiedBy;
-};
-
-struct Ward {
-    int wardNumber;
-    WardType type;
-    std::vector<Bed> beds;
-    int capacity;
-};
 
 struct Patient {
     int id;
@@ -39,6 +28,19 @@ struct Doctor {
     std::string specialization;
     std::string contact;
     DoctorStatus status;
+};
+
+struct Bed {
+    int bedNumber;
+    bool isOccupied;
+    Patient* occupiedBy;
+};
+
+struct Ward {
+    int wardNumber;
+    WardType type;
+    std::vector<Bed> beds;
+    int capacity;
 };
 
 struct Appointment {
@@ -60,4 +62,4 @@ struct Medicine {
     StockStatus status;
 };
 
-#endif // HOSPITAL_TYPES_H
+#endif// HOSPITAL_TYPES_H
