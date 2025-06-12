@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <fstream>
+#include <sstream>
+
 
 using namespace std;
 
@@ -12,7 +15,7 @@ using namespace std;
 void bookAppointment();
 void viewAppointments();
 void cancelAppointment();
-
+void searchPatient();
 void runAppointmentModule() {
     int choice;
 
@@ -170,4 +173,63 @@ void searchPatient() {
         default:
             cout << "Invalid choice.\n";
     }
+}
+void loadPatientsFromFile(const string& filename) {
+    ifstream infile(filename);
+    if (!infile) {
+        cerr << "Failed to open patient data file: " << filename << std::endl;
+        return;
+    }
+
+    string line;
+    while (getline(infile, line)) {
+        stringstream ss(line);
+        string token;
+        Patient p;
+
+        // Read ID
+        if (getline(ss, token, ',')) {
+    try {
+        p.id = stoi(token);
+    } catch (const invalid_argument&) {
+        cerr << "Invalid Patient ID: " << token << "\n";
+        continue; // or handle error
+    }
+} else continue;
+
+        // Read Name
+        if (getline(ss, token, ',')) {
+            p.name = token;
+        } else continue;
+
+        // Read Age
+        if (getline(ss, token, ',')) {
+            try {
+        p.age = stoi(token);
+            }
+                catch (const invalid_argument&) {
+        cerr << "Invalid Age: " << token << "\n";
+        continue; 
+    }
+        } else continue;
+
+        // Read Gender
+        if (getline(ss, token, ',')) {
+            p.gender = token;
+        } else continue;
+
+        // Read Contact
+        if (getline(ss, token, ',')) {
+            p.contact = token;
+        } else continue;
+
+        // Read Medical History
+        if (getline(ss, token, ',')) {
+            p.medicalHistory = token;
+        } else continue;
+
+        patients.push_back(p);
+    }
+
+    cout << "Loaded " << patients.size() << " patients from file.\n";
 }
