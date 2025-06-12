@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <s
+
 using namespace std;
 
 void runDoctorModule() {
@@ -233,7 +233,7 @@ void searchDoctor(){
      case 2:
             cout << "Enter Doctor Name: ";
             getline(cin, searchTerm);
-            for (const auto& Doctor : doctor) {
+            for (const auto& Doctor : doctors) {
                 if (Doctor.name == searchTerm) {
                     cout << "\Doctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
@@ -248,7 +248,7 @@ void searchDoctor(){
      case 3:
             cout << "Enter Doctor Contact: ";
             getline(cin, searchTerm);
-            for (const auto& Doctor : doctor) {
+            for (const auto& Doctor : doctors) {
                 if (Doctor.specialization == searchTerm) {
                   cout << "\Doctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
@@ -263,7 +263,7 @@ void searchDoctor(){
         case 4:
             cout << "Enter Doctor Contact: ";
             getline(cin, searchTerm);
-            for (const auto& Doctor : doctor) {
+            for (const auto& Doctor : doctors) {
                 if (Doctor.contact == searchTerm) {
                   cout << "\Doctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
@@ -350,6 +350,92 @@ void loadDoctorsFromFile(const string& filename) {
     }
     cout << "Loaded " << doctors.size() << " doctors from " << filename << endl;
 }
+int doctorCount = 0;
+int patientCount = 0;
+int appointmentCount = 0;
+
+// --- 17 & 19: Load Doctor Records & Assign Doctor ---
+void manageDoctors() {
+    cout << "\n--- Load & Manage Doctors (17 & 19) ---\n";
+
+    // Load doctor records from file
+    ifstream file("doctors.txt");
+    if (!file) {
+        cout << "No existing doctor records found.\n";
+    } else {
+        while (file >> doctors[doctorCount].id) {
+            file.ignore();
+            getline(file, doctors[doctorCount].name);
+            getline(file, doctors[doctorCount].specialization);
+            getline(file, doctors[doctorCount].contact);
+            getline(file, doctors[doctorCount].schedule);
+            doctors[doctorCount].available = true;
+            doctorCount++;
+        }
+        file.close();
+        cout << "Doctor records loaded successfully.\n";
+    }
+
+    // Assign Doctor to Patient
+    int patientId, doctorId;
+    cout << "\nEnter Patient ID: ";
+    cin >> patientId;
+    cout << "Enter Doctor ID: ";
+    cin >> doctorId;
+
+    bool patientFound = false, doctorFound = false;
+
+    for (int i = 0; i < patientCount; i++) {
+        if (patients[i].id == patientId) {
+            patientFound = true;
+            patients[i].assignedDoctorId = doctorId;
+            break;
+        }
+    }
+
+    for (int i = 0; i < doctorCount; i++) {
+        if (doctors[i].id == doctorId) {
+            doctorFound = true;
+            break;
+        }
+    }
+
+    if (!patientFound || !doctorFound) {
+        cout << "Invalid Patient or Doctor ID.\n";
+    } else {
+        cout << "Doctor ID " << doctorId << " has been assigned to Patient ID " << patientId << ".\n";
+    }
+}
+
+// --- 20: Doctor Schedule Management ---
+void addDoctorSchedule() {
+    if (doctorCount >= MAX_DOCTORS) {
+        cout << "Doctor list full.\n";
+        return;
+    }
+    
+    cout << "\n--- Add Doctor Schedule (20) ---\n";
+    cout << "Enter Doctor ID: ";
+    cin >> doctors[doctorCount].id;
+    cin.ignore();
+    
+    cout << "Enter Name: ";
+    getline(cin, doctors[doctorCount].name);
+    
+    cout << "Enter Specialization: ";
+    getline(cin, doctors[doctorCount].specialization);
+    
+    cout << "Enter Contact: ";
+    getline(cin, doctors[doctorCount].contact);
+    
+    cout << "Enter Schedule (e.g. 9AM-5PM): ";
+    getline(cin, doctors[doctorCount].schedule);
+    
+    doctors[doctorCount].available = true;
+    doctorCount++;
+    cout << "Doctor schedule added.\n";
+}
+
     int choice;
     do {
         cout << "\n=== Doctor Management Menu ===\n"
