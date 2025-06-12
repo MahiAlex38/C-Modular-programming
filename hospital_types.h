@@ -7,6 +7,7 @@ enum AppointmentStatus { PENDING, ACTIVE, RETIRED };
 enum DoctorStatus { ACTIVE_DOCTOR, ON_LEAVE, RETIRED_DOCTOR };
 enum StockStatus { IN_STOCK, OUT_OF_STOCK };
 enum Gender { MALE, FEMALE };
+enum AdmissionStatus { ADMITTED, DISCHARGED };
 
 struct Patient {
     int id;
@@ -15,6 +16,7 @@ struct Patient {
     std::string gender;
     std::string contact;
     std::string medicalHistory;
+    AdmissionStatus admissionStatus;
 };
 
 struct Doctor {
