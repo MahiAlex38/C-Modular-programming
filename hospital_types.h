@@ -8,6 +8,20 @@ enum DoctorStatus { ACTIVE_DOCTOR, ON_LEAVE, RETIRED_DOCTOR };
 enum StockStatus { IN_STOCK, OUT_OF_STOCK };
 enum Gender { MALE, FEMALE };
 enum AdmissionStatus { ADMITTED, DISCHARGED };
+enum WardType { GENERAL, PRIVATE, ICU, EMERGENCY };
+
+struct Bed {
+    int bedNumber;
+    bool isOccupied;
+    Patient* occupiedBy;
+};
+
+struct Ward {
+    int wardNumber;
+    WardType type;
+    std::vector<Bed> beds;
+    int capacity;
+};
 
 struct Patient {
     int id;
@@ -41,6 +55,8 @@ struct Medicine {
     std::string name;
     double price;
     int stock;
+    int initialStock;
+    int timesDispensed;
     StockStatus status;
 };
 
