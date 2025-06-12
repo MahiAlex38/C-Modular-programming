@@ -6,3 +6,4 @@ std::vector<Patient> patients;
 std::vector<Doctor> doctors;
 std::vector<Appointment> appointments;
 std::vector<Medicine> medicines;
+std::vector<Ward> wards;
