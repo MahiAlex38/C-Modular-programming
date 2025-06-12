@@ -79,7 +79,26 @@ void runDoctorModule() {
             }
         }
     };
+void deleteDoctor() {
+    if (!authenticateManager()) {
+        cout << "Unauthorized.\n";
+        return;
+    }
+    int id;
+    cout << "Enter Doctor ID to delete: ";
+    cin >> id;
+    cin.ignore();
 
+    for (auto it = doctors.begin(); it != doctors.end(); ++it) {
+        if (it->id == id) {
+            doctors.erase(it);
+            cout << "Doctor successfully deleted.\n";
+            return;
+        }
+    }
+    cout << "Doctor not found.\n";
+}
+    
     auto checkDoctorAvailability = [&]() {
         int id;
         cout << "Enter Doctor ID to check availability: ";
@@ -108,6 +127,7 @@ void runDoctorModule() {
         }
         cout << "Doctor not found.\n";
     };
+    
 
     auto editDoctor = [&]() {
         if (!authenticateManager()) {
@@ -172,11 +192,12 @@ void runDoctorModule() {
         }
         cout << "Doctor not found.\n";
     };
+    
 
     int choice;
     do {
         cout << "\n=== Doctor Management Menu ===\n"
-             << "1. Add Doctor\n2. Edit Doctor\n3. Display Doctors\n4. Check Doctor Availability\n5. Exit\n"
+             << "1. Add Doctor\n2. Edit Doctor\n3. Display Doctors\n4 Delete Doctor\n5 Check Doctor Availability\n 6. Exit\n"
              << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
@@ -184,8 +205,9 @@ void runDoctorModule() {
             case 1: addDoctor(); break;
             case 2: editDoctor(); break;
             case 3: displayDoctors(); break;
-            case 4: checkDoctorAvailability(); break;
-            case 5: cout << "Exiting Doctor Module...\n"; break;
+            case 4: deleteDoctor(); break;
+            case 5: checkDoctorAvailability(); break;
+            case 6: cout << "Exiting Doctor Module...\n"; break;
             default: cout << "Invalid choice.\n";
         }
     } while (choice != 5);
