@@ -80,6 +80,35 @@ void runDoctorModule() {
         }
     };
 
+    auto checkDoctorAvailability = [&]() {
+        int id;
+        cout << "Enter Doctor ID to check availability: ";
+        cin >> id;
+        cin.ignore();
+
+        for (const auto& doc : doctors) {
+            if (doc.id == id) {
+                cout << "\nDoctor Details:\n";
+                cout << "Name: " << doc.name << "\n";
+                cout << "Specialization: " << doc.specialization << "\n";
+                cout << "Availability Status: ";
+                switch (doc.status) {
+                    case ACTIVE_DOCTOR:
+                        cout << "AVAILABLE\n";
+                        break;
+                    case ON_LEAVE:
+                        cout << "NOT AVAILABLE - Currently on leave\n";
+                        break;
+                    case RETIRED_DOCTOR:
+                        cout << "NOT AVAILABLE - Retired\n";
+                        break;
+                }
+                return;
+            }
+        }
+        cout << "Doctor not found.\n";
+    };
+
     auto editDoctor = [&]() {
         if (!authenticateManager()) {
             cout << "Unauthorized.\n";
@@ -147,7 +176,7 @@ void runDoctorModule() {
     int choice;
     do {
         cout << "\n=== Doctor Management Menu ===\n"
-             << "1. Add Doctor\n2. Edit Doctor\n3. Display Doctors\n4. Exit\n"
+             << "1. Add Doctor\n2. Edit Doctor\n3. Display Doctors\n4. Check Doctor Availability\n5. Exit\n"
              << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
@@ -155,8 +184,9 @@ void runDoctorModule() {
             case 1: addDoctor(); break;
             case 2: editDoctor(); break;
             case 3: displayDoctors(); break;
-            case 4: cout << "Exiting Doctor Module...\n"; break;
+            case 4: checkDoctorAvailability(); break;
+            case 5: cout << "Exiting Doctor Module...\n"; break;
             default: cout << "Invalid choice.\n";
         }
-    } while (choice != 4);
+    } while (choice != 5);
 }

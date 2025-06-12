@@ -8,5 +8,6 @@ extern std::vector<Patient> patients;
 extern std::vector<Doctor> doctors;
 extern std::vector<Appointment> appointments;
 extern std::vector<Medicine> medicines;
+extern std::vector<Ward> wards;
 
 #endif // HOSPITAL_DATA_H

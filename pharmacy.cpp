@@ -5,20 +5,70 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <algorithm>
+#include <iomanip>
 
 using namespace std;
 void addMedicine();
 void updateStock();
 void viewInventory();
+void generateUsageReport() {
+    if (medicines.empty()) {
+        cout << "No medicines in inventory.\n";
+        return;
+    }
+
+    // Create a copy of medicines vector for sorting
+    vector<Medicine> sortedMedicines = medicines;
+    
+    // Sort by times dispensed in descending order
+    sort(sortedMedicines.begin(), sortedMedicines.end(),
+         [](const Medicine& a, const Medicine& b) {
+             return a.timesDispensed > b.timesDispensed;
+         });
+
+    cout << "\n=== Medicine Usage Report ===\n";
+    cout << setfill('=') << setw(80) << "\n" << setfill(' ');
+    cout << left << setw(5) << "ID"
+         << setw(20) << "Name"
+         << setw(15) << "Times Used"
+         << setw(15) << "Initial Stock"
+         << "Current Stock\n";
+    cout << setfill('-') << setw(80) << "\n" << setfill(' ');
+
+    for (const auto& med : sortedMedicines) {
+        cout << left << setw(5) << med.id
+             << setw(20) << med.name
+             << setw(15) << med.timesDispensed
+             << setw(15) << med.initialStock
+             << med.stock << "\n";
+    }
+
+    cout << setfill('=') << setw(80) << "\n" << setfill(' ');
+
+    // Calculate and display total statistics
+    int totalDispensed = 0;
+    for (const auto& med : medicines) {
+        totalDispensed += med.timesDispensed;
+    }
+
+    cout << "\nTotal Medicines Dispensed: " << totalDispensed << "\n";
+    if (!sortedMedicines.empty()) {
+        cout << "Most Prescribed Medicine: " << sortedMedicines[0].name
+             << " (" << sortedMedicines[0].timesDispensed << " times)\n";
+    }
+}
+
 void runPharmacyModule() {
     int choice;
 
     while (true) {
-        cout << "\n--- Pharmacy Inventory Menu ---\n";
+        cout << "\n=== Pharmacy Inventory Menu ===\n";
         cout << "1. Add Medicine\n";
         cout << "2. Update Stock\n";
         cout << "3. View Inventory\n";
-        cout << "4. Exit to Main Menu\n";
+        cout << "4. Generate Usage Report\n";
+        cout << "5. Exit to Main Menu\n";
         cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore();
@@ -27,7 +77,8 @@ void runPharmacyModule() {
             case 1: addMedicine(); break;
             case 2: updateStock(); break;
             case 3: viewInventory(); break;
-            case 4: return;
+            case 4: generateUsageReport(); break;
+            case 5: return;
             default: cout << "Invalid choice. Try again.\n";
         }
     }
@@ -51,6 +102,8 @@ void addMedicine() {
     cout << "Enter Stock Quantity: ";
     getline(cin, input);
     med.stock = stoi(input);
+    med.initialStock = med.stock;
+    med.timesDispensed = 0;
 
     med.status = med.stock > 0 ? IN_STOCK : OUT_OF_STOCK;
 
@@ -62,13 +115,22 @@ void updateStock() {
     int id, quantity;
     cout << "Enter Medicine ID to update stock: ";
     cin >> id;
-    cout << "Enter quantity to add: ";
+    cout << "Enter quantity (negative for dispensing): ";
     cin >> quantity;
     cin.ignore();
 
     for (auto& med : medicines) {
         if (med.id == id) {
+            if (quantity < 0 && abs(quantity) > med.stock) {
+                cout << "Error: Not enough stock available.\n";
+                return;
+            }
             med.stock += quantity;
+            if (quantity < 0) {
+                med.timesDispensed += abs(quantity);
+            } else {
+                med.initialStock += quantity;
+            }
             med.status = med.stock > 0 ? IN_STOCK : OUT_OF_STOCK;
             cout << "Stock updated. New stock: " << med.stock << "\n";
             return;
@@ -84,12 +146,22 @@ void viewInventory() {
         return;
     }
 
+    cout << "\n=== Current Inventory ===\n";
+    cout << setfill('-') << setw(80) << "\n" << setfill(' ');
+    cout << left << setw(5) << "ID" 
+         << setw(20) << "Name"
+         << setw(10) << "Price"
+         << setw(10) << "Stock"
+         << setw(15) << "Times Used"
+         << "Status\n";
+    cout << setfill('-') << setw(80) << "\n" << setfill(' ');
+
     for (const auto& med : medicines) {
-        cout << "\n--- Medicine ---\n";
-        cout << "ID: " << med.id << "\n";
-        cout << "Name: " << med.name << "\n";
-        cout << "Price: " << med.price << "\n";
-        cout << "Stock: " << med.stock << "\n";
-        cout << "Status: " << (med.status == IN_STOCK ? "In Stock" : "Out of Stock") << "\n";
+        cout << left << setw(5) << med.id
+             << setw(20) << med.name
+             << setw(10) << fixed << setprecision(2) << med.price
+             << setw(10) << med.stock
+             << setw(15) << med.timesDispensed
+             << (med.status == IN_STOCK ? "In Stock" : "Out of Stock") << "\n";
     }
 }
