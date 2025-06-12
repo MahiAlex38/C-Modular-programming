@@ -216,7 +216,7 @@ void searchDoctor(){
                 cout << "Enter Doctor ID: ";
                 cin >> id;
                 cin.ignore();
-                for (const auto& Doctor : doctor) {
+                for (const auto& Doctor : doctors) {
                     if (Doctor.id == id) {
                         cout << "\nDoctor Found:\n";
                         cout << "ID: " << Doctor.id << "\n";
