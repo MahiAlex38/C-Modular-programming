@@ -1,6 +1,7 @@
 #include "hospital_types.h"
 #include "hospital_data.h"
 #include "utils.h"
+#include <pharmacy>
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
