@@ -6,6 +6,35 @@
 #include <ctime>
 #include <utils.h>
 
+void runReportingModule() {
+    // Assuming these are globally accessible or passed as parameters
+    extern std::vector<Patient> patients;
+    extern std::vector<Doctor> doctors;
+    extern std::vector<Appointment> appointments;
+    extern std::vector<SaleRecord> sales;
+    int choice;
+
+    while (true) {
+        cout << "\n--- Reporting Management Menu ---\n";
+        cout << "1. Generate daily Patient report\n";
+        cout << "2. Generate doctor performance Module\n";
+        cout << "3. Report critical cases\n";
+        cout << "4. Sales Report\n";
+        cout << "5. Exit to Main Menu\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore();
+
+        switch (choice) {
+            case 1: generateDailyPatientReport(patients); break;
+            case 2: generateDoctorPerformanceReport(doctors, appointments); break;
+            case 3: reportCriticalCases(patients); break;
+            case 4: generateRevenueReport(sales); break;
+            case 5: return;
+            default: cout << "Invalid choice. Try again.\n";
+        }
+    }
+}
 
 string getCurrentDateString() {
     time_t t = time(nullptr);
@@ -14,7 +43,7 @@ string getCurrentDateString() {
     snprintf(buf, sizeof(buf), "%04d-%02d-%02d", now->tm_year + 1900, now->tm_mon + 1, now->tm_mday);
     return string(buf);
 }
-void generateDailyPatientReport(const std::vector<Patient>& patients) {
+void generateDailyPatientReport(const vector<Patient>& patients) {
     string today = getCurrentDateString();
     int admittedCount = 0;
     int dischargedCount = 0;
