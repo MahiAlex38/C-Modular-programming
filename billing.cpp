@@ -213,6 +213,10 @@ void deleteBill() {
         cout << "- " << medPair.first->name << " x " << medPair.second << "\n";
     }
     cout << "Total Amount: " << bill->totalAmount << " birr\n";
+    cout << "Payment Status: " << (bill->paymentStatus == PAID ? "PAID" : "UNPAID") << "\n";
+    if (bill->paymentStatus == PAID) {
+        cout << "Payment Date: " << bill->paymentDate;
+    }
 }
 
 // Usage example
@@ -237,6 +241,10 @@ void billingRecords() {
             outFile << "  - " << medPair.first->name << " x " << medPair.second << "\n";
         }
         outFile << "TotalAmount: " << bill.totalAmount << "\n";
+        outFile << "PaymentStatus: " << (bill.paymentStatus == PAID ? "PAID" : "UNPAID") << "\n";
+        if (bill.paymentStatus == PAID) {
+            outFile << "PaymentDate: " << bill.paymentDate;
+        }
         outFile << "--------------------------\n"; // Separator for each bill
     }
 
@@ -255,6 +263,7 @@ void billingRecords() {
     string line;
     Bill currentBill;
     currentBill.medicines.clear();
+    currentBill.paymentStatus = UNPAID;
 
     while (getline(inFile, line)) {
         if (line.find("PatientID:") == 0) {
@@ -281,11 +290,20 @@ void billingRecords() {
             }
         } else if (line.find("Total Amount:") == 0) {
             currentBill.totalAmount = stod(line.substr(line.find(':') + 1));
+        } else if (line.find("PaymentStatus:") == 0) {
+            string status = line.substr(line.find(':') + 1);
+            status.erase(0, status.find_first_not_of(" \t\n\r"));
+            status.erase(status.find_last_not_of(" \t\n\r") + 1);
+            currentBill.paymentStatus = (status == "PAID" ? PAID : UNPAID);
+        } else if (line.find("PaymentDate:") == 0) {
+            currentBill.paymentDate = line.substr(line.find(':') + 1);
         } else if (line.find("-----------------------------") == 0) {
             // End of one bill record
             bills.push_back(currentBill);
             // Prepare for next record
             currentBill.medicines.clear();
+            currentBill.paymentStatus = UNPAID;
+            currentBill.paymentDate = "";
         }
     }
 
@@ -351,20 +369,67 @@ auto processBilling = [&]() {
         cin.ignore();
         if (payment >= finalTotal) {
             cout << "Payment accepted. Change: " << payment - finalTotal << " birr\n";
+            
+            
+            Bill newBill;
+            newBill.patientId = id;
+            newBill.visits = visits;
+            newBill.stayDays = stay;
+            newBill.totalAmount = finalTotal;
+            newBill.paymentStatus = PAID;
+            
+            time_t now = time(0);
+            char* dt = ctime(&now);
+            newBill.paymentDate = string(dt);
+            
+            bills.push_back(newBill);
+            
+            cout << "Bill marked as PAID on " << newBill.paymentDate;
             break;
         } else {
             cout << "Insufficient payment. Please enter at least " << finalTotal << " birr.\n";
         }
     }
 };
+    void updatePaymentStatus() {
+        int patientId = getValidInt("Enter patient ID to update payment status: ");
+        Bill* bill = findBillByPatientId(patientId);
+        if (!bill) {
+            cout << "Bill not found for this patient.\n";
+            return;
+        }
+
+        displayBill(bill);
+        cout << "\nUpdate Payment Status:\n";
+        cout << "1. Mark as PAID\n";
+        cout << "2. Mark as UNPAID\n";
+        int statusChoice = getValidInt("Enter choice: ");
+
+        if (statusChoice == 1) {
+            bill->paymentStatus = PAID;
+            // Get current date for payment
+            time_t now = time(0);
+            char* dt = ctime(&now);
+            bill->paymentDate = string(dt);
+            cout << "Bill marked as PAID on " << bill->paymentDate;
+        } else if (statusChoice == 2) {
+            bill->paymentStatus = UNPAID;
+            bill->paymentDate = "";
+            cout << "Bill marked as UNPAID\n";
+        } else {
+            cout << "Invalid choice.\n";
+        }
+    }
+
     int choice;
     do {
         cout << "\n--- Billing & Payment Menu ---\n";
         cout << "1. Process Billing\n";
-        cout<<"2. Edit billing system\n";
-        cout<<"3, Delete Bill\n";
-        cout<<"4. Search Bill\n";
-        cout << "5. Exit\n";
+        cout << "2. Edit billing system\n";
+        cout << "3. Delete Bill\n";
+        cout << "4. Search Bill\n";
+        cout << "5. Update Payment Status\n";
+        cout << "6. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
         cin.ignore();
@@ -372,9 +437,10 @@ auto processBilling = [&]() {
             case 1: processBilling(); break;
             case 2: editchoice(); break;
             case 3: dleteBill(); break;
-            case 4:searchBill(); break;
-            case 5: cout << "Returning to main menu...\n"; break;
+            case 4: searchBill(); break;
+            case 5: updatePaymentStatus(); break;
+            case 6: cout << "Returning to main menu...\n"; break;
             default: cout << "Invalid option. Try again.\n";
         }
-    } while (choice != 5);
+    } while (choice != 6);
 }
