@@ -83,3 +83,46 @@ void reportCriticalCases(const std::vector<Patient>& patients) {
 
     
 }
+
+void generateRevenueReport(const std::vector<SaleRecord>& sales, int year = 0, int month = 0) {
+    double totalEarnings = 0.0;
+    map<string, double> periodEarnings; 
+
+    for (const auto& sale : sales) {
+        // Parse date
+        string date = sale.date; 
+        string yearStr = date.substr(0,4);
+        string monthStr = date.substr(5,2);
+        string periodKey;
+
+        if (month == 0) {
+            
+            periodKey = yearStr;
+        } else if (year == std::stoi(yearStr) && month == std::stoi(monthStr)) {
+            
+            periodKey = yearStr + "-" + monthStr;
+        } else if (year == 0 && month == 0) {
+            
+            periodKey = "All Time";
+        } else {
+            continue; // skip if not matching the filter
+        }
+
+        periodEarnings[periodKey] += sale.totalPrice;
+        totalEarnings += sale.totalPrice;
+    }
+
+    
+    cout << "\n=== Revenue Report ===\n";
+    if (periodEarnings.empty()) {
+        cout << "No sales data for the specified period.\n";
+        return;
+    }
+
+    for (const auto& entry : periodEarnings) {
+        cout << "Period: " << entry.first << " | Earnings: $" << entry.second << "\n";
+    }
+
+    cout << "Total Earnings: $" << totalEarnings << "\n";
+}
+
