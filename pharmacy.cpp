@@ -222,7 +222,7 @@ void viewInventory() {
              << (med.status == IN_STOCK ? "In Stock" : "Out of Stock") << "\n";
     }
 }
-void searchMedicineById() {
+void searchMedicine() {
     int id;
     cout << "Enter Medicine ID to search: ";
     cin >> id;
