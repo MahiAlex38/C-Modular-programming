@@ -235,7 +235,7 @@ void searchDoctor(){
             getline(cin, searchTerm);
             for (const auto& Doctor : doctors) {
                 if (Doctor.name == searchTerm) {
-                    cout << "\Doctor Found:\n";
+                    cout << "\nDoctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
                     cout << "Name: " << Doctor.name << "\n";
                     cout<<"Specialization: "<< Doctor.specialization<<"\n";
@@ -250,7 +250,7 @@ void searchDoctor(){
             getline(cin, searchTerm);
             for (const auto& Doctor : doctors) {
                 if (Doctor.specialization == searchTerm) {
-                  cout << "\Doctor Found:\n";
+                  cout << "\nDoctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
                     cout << "Name: " << Doctor.name << "\n";
                     cout<<"Specialization: "<< Doctor.specialization<<"\n";
@@ -265,7 +265,7 @@ void searchDoctor(){
             getline(cin, searchTerm);
             for (const auto& Doctor : doctors) {
                 if (Doctor.contact == searchTerm) {
-                  cout << "\Doctor Found:\n";
+                  cout << "\nDoctor Found:\n";
                     cout << "ID: " << Doctor.id << "\n";
                     cout << "Name: " << Doctor.name << "\n";
                     cout<<"Specialization: "<< Doctor.specialization<<"\n";
