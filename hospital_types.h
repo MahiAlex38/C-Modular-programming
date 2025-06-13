@@ -60,6 +60,7 @@ struct Medicine {
     int initialStock;
     int timesDispensed;
     StockStatus status;
+std::string expiryDate;
 };
 
 #endif// HOSPITAL_TYPES_H
