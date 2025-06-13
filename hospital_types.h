@@ -64,4 +64,13 @@ struct Medicine {
 std::string expiryDate;
 };
 
+struct SaleRecord {
+    int saleID;
+    int medicineID;
+    int quantity;
+    std::string date; 
+    double totalPrice;
+};
+
+
 #endif// HOSPITAL_TYPES_H
