@@ -75,12 +75,16 @@ struct SaleRecord {
     std::string date; 
     double totalPrice;
 };
+enum PaymentStatus { UNPAID, PAID };
+
 struct Bill {
     int patientId;
     int visits;
     int stayDays;
     vector<pair<Medicine*, int>> medicines;  
     double totalAmount;
+    PaymentStatus paymentStatus = UNPAID;
+    string paymentDate;
 };
 
 
