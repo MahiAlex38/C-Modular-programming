@@ -329,7 +329,20 @@ void loadInventoryFromFile() {
     inFile.close();
     cout << "Inventory loaded successfully.\n";
 }
+string getCurrentDateString() {
+    time_t t = time(nullptr);
+    tm* now = localtime(&t);
+    char buf[11];
+    snprintf(buf, sizeof(buf), "%04d-%02d-%02d", now->tm_year + 1900,
+             now->tm_mon + 1, now->tm_mday);
+    return std::string(buf);
+}
 
+bool isExpired(const string& expiryDate) {
+    string today = getCurrentDateString();
+ 
+    return today > expiryDate;
+}
 void runPharmacyModule() {
     int choice;
 
