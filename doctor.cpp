@@ -8,9 +8,25 @@
 
 using namespace std;
 
+const int MAX_DOCTORS = 100;
+const int MAX_PATIENTS = 100;
+const int MAX_APPOINTMENTS = 100;
+
+
+bool authenticateManager() {
+    string password;
+    cout << "Enter password: ";
+    cin >> password;
+    
+    return (password == "admin");
+}
+
+void deleteDoctor();
+void searchDoctor();
+
 void runDoctorModule() {
     const string MANAGER_ID = "admin123";
-
+  
     auto authenticateManager = [&]() -> bool {
         string enteredID;
         cout << "Enter Manager ID to continue: ";
@@ -62,27 +78,6 @@ void runDoctorModule() {
         doctors.push_back(doc);
         cout << "Doctor added successfully!\n";
     };
-
-    auto displayDoctors = [&]() {
-        if (doctors.empty()) {
-            cout << "No doctor records to display.\n";
-            return;
-        }
-        for (const auto& doc : doctors) {
-            cout << "\nID: " << doc.id
-                 << "\nName: " << doc.name
-                 << "\nSpecialization: " << doc.specialization
-                 << "\nContact: " << doc.contact
-                 << "\nStatus: ";
-            switch (doc.status) {
-                case ACTIVE_DOCTOR: cout << "Active\n"; break;
-                case ON_LEAVE: cout << "On Leave\n"; break;
-                case RETIRED_DOCTOR: cout << "Retired\n"; break;
-            }
-        }
-    };
-
-    
     auto checkDoctorAvailability = [&]() {
         int id;
         cout << "Enter Doctor ID to check availability: ";
@@ -111,8 +106,6 @@ void runDoctorModule() {
         }
         cout << "Doctor not found.\n";
     };
-    
-
     auto editDoctor = [&]() {
         if (!authenticateManager()) {
             cout << "Unauthorized.\n";
@@ -176,7 +169,56 @@ void runDoctorModule() {
         }
         cout << "Doctor not found.\n";
     };
+
+    auto displayDoctors = [&]() {
+        if (doctors.empty()) {
+            cout << "No doctor records to display.\n";
+            return;
+        }
+        for (const auto& doc : doctors) {
+            cout << "\nID: " << doc.id
+                 << "\nName: " << doc.name
+                 << "\nSpecialization: " << doc.specialization
+                 << "\nContact: " << doc.contact
+                 << "\nStatus: ";
+            switch (doc.status) {
+                case ACTIVE_DOCTOR: cout << "Active\n"; break;
+                case ON_LEAVE: cout << "On Leave\n"; break;
+                case RETIRED_DOCTOR: cout << "Retired\n"; break;
+            }
+        }
+    };
+
+    int choice;
+    do {
+        cout << "\n=== Doctor Management Menu ===\n"
+             << "1. Add Doctor\n"
+             << "2. Edit Doctor\n"
+             << "3. Display Doctors\n"
+             << "4. Delete Doctor\n"
+             << "5 Check Doctor Availability\n"
+             << "6. Search Doctor\n"
+             << "7. Exit\n"
+             << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore();
+
+        switch (choice) {
+            case 1: addDoctor(); break;
+            case 2: editDoctor(); break;
+            case 3: displayDoctors(); break;
+            case 4: deleteDoctor(); break;
+            case 5: checkDoctorAvailability; break;
+            case 6: searchDoctor(); break;
+            case 7: cout << "Exiting Doctor Module...\n"; break;
+            default: cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 7);
+} // The main menu loop
     
+
+    
+
 void deleteDoctor() {
     if (!authenticateManager()) {
         cout << "Unauthorized.\n";
@@ -243,7 +285,7 @@ void searchDoctor(){
                     found = true;
                 }
             }
-            if (!found) cout << "Doctor not found.\n";
+            if (!found) cout << "\nDoctor not found.\n";
             break;
      case 3:
             cout << "Enter Doctor Contact: ";
@@ -258,7 +300,7 @@ void searchDoctor(){
                     found = true;
                 }
             }
-            if (!found) cout << "Doctor not found.\n";
+            if (!found) cout << "\nDoctor not found.\n";
             break;
         case 4:
             cout << "Enter Doctor Contact: ";
@@ -278,6 +320,7 @@ void searchDoctor(){
         default:
             cout << "Invalid choice.\n";
     }
+}
 void saveDoctorsToFile(const string& filename) {
     ofstream ofs(filename);
     if (!ofs) {
