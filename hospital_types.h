@@ -20,6 +20,7 @@ struct Patient {
     std::string contact;
     std::string medicalHistory;
     AdmissionStatus admissionStatus;
+    enum CaseSeverity { NORMAL, CRITICAL };
     CaseSeverity severity;
 };
 
