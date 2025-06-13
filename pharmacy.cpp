@@ -13,6 +13,7 @@ using namespace std;
 void addMedicine();
 void updateStock();
 void viewInventory();
+void searchMedicine();
 void generateUsageReport() {
     if (medicines.empty()) {
         cout << "No medicines in inventory.\n";
@@ -125,22 +126,19 @@ void editMedicine() {
     cout << "Medicine with ID " << id << " not found.\n";
 }
 void deleteMedicine() {
-    int id;
-    cout << "Enter Medicine ID to delete: ";
-    cin >> id;
-    cin.ignore();
-
-    // Find medicine index
+    int id = getValidInt("Enter Medicine ID to delete: ");
+    
     auto it = std::remove_if(medicines.begin(), medicines.end(),
-        [id](constMedicine&med) { return med.id == id; });
+        [id](const Medicine& med) { return med.id == id; });
 
     if (it != medicines.end()) {
         medicines.erase(it, medicines.end());
-        cout << "Medicine with ID " << id << " has been deleted from inventory.\n";
+        cout << "Medicine deleted successfully.\n";
     } else {
         cout << "Medicine with ID " << id << " not found.\n";
     }
 }
+
 
 
 void addMedicine() {
