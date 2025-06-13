@@ -75,6 +75,13 @@ struct SaleRecord {
     std::string date; 
     double totalPrice;
 };
+struct Bill {
+    int patientId;
+    int visits;
+    int stayDays;
+    vector<pair<Medicine*, int>> medicines;  
+    double totalAmount;
+};
 
 
 #endif// HOSPITAL_TYPES_H
