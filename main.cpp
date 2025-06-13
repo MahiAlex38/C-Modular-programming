@@ -8,6 +8,7 @@ void runDoctorModule();
 void runPatientModule();
 void runPharmacyModule();
 void runWardModule();
+void runReportingModule();
 
 int main() {
     int choice;
@@ -19,7 +20,8 @@ int main() {
         cout << "4. Patient Management Module\n";
         cout << "5. Pharmacy Inventory Module\n";
         cout << "6. Ward Management Module\n";
-        cout << "7. Exit\n";
+        cout<< "7. Report Management Module\n";
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         cin.ignore(); // Clear newline from input buffer
@@ -44,6 +46,9 @@ int main() {
                 runWardModule();
                 break;
             case 7:
+                runReportingModule();
+                break;
+            case 8:
                 cout << "Exiting system. Goodbye!" << endl;
                 break;
             default:
