@@ -1,0 +1,33 @@
+#include <map>
+#include <iomanip>
+#include <hospital_data.h>
+#include <hospital_types.h>
+#include <iostream>
+void generateDoctorPerformanceReport(const std::vector<Doctor>& doctors, const std::vector<Appointment>& appointments) {
+    // Map DoctorID to number of patients treated
+    std::map<int, int> doctorPatientCount;
+
+    // Initialize counts for all doctors to 0
+    for (const auto& doc : doctors) {
+        doctorPatientCount[doc.id] = 0;
+    }
+
+    // Count appointments per doctor
+    for (const auto& appt : appointments) {
+        doctorPatientCount[appt.doctor.id]++;
+    }
+
+    // Display the report
+    std::cout << "\n=== Doctor Performance Report ===\n";
+    std::cout << std::left << std::setw(10) << "Doctor ID"
+              << std::left << std::setw(25) << "Doctor Name"
+              << "Patients Treated\n";
+    std::cout << std::string(60, '=') << "\n";
+
+    for (const auto& doc : doctors) {
+        int count = doctorPatientCount[doc.id];
+        std::cout << std::left << std::setw(10) << doc.id
+                  << std::left << std::setw(25) << doc.name
+                  << count << "\n";
+    }
+}
