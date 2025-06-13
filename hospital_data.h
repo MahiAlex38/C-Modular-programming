@@ -10,5 +10,6 @@ extern std::vector<Appointment> appointments;
 extern std::vector<Medicine> medicines;
 extern std::vector<Ward> wards;
 extern std::vector<SaleRecord> sales;
+extern std::vector<Bill> bills;
 
 #endif // HOSPITAL_DATA_H
