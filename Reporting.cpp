@@ -4,7 +4,7 @@
 #include <hospital_types.h>
 #include <iostream>
 #include <ctime>
-#inlcude <utils.h>
+#include <utils.h>
 
 
 string getCurrentDateString() {
